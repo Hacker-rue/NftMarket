@@ -1,0 +1,16 @@
+{
+  "name": "nftmarket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tonclient/appkit": "^0.3.0",
+    "@tonclient/core": "^1.30.0",
+    "@tonclient/lib-node": "^1.30.0"
+  }
+}
