@@ -1,5 +1,8 @@
 pragma ton-solidity >=0.52.0;
 
+pragma AbiHeader time;
+pragma AbiHeader expire;
+
 import "../NftRootColection.sol";
 
 contract NftRootResolver {

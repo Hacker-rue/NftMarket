@@ -10,7 +10,8 @@ import "./contracts/libraries/Constants.sol";
 
 contract NFTMarket is NftRootResolver {
 
-    TvmCell _root;
+    address[] NftColectionsOwner;
+
     TvmCell _data;
     TvmCell _dataChunk;
     TvmCell _index;
@@ -21,11 +22,11 @@ contract NFTMarket is NftRootResolver {
 
     constructor (TvmCell root, TvmCell data, TvmCell dataChunk, TvmCell index, TvmCell indexBasis) public {
         tvm.accept();
-        _root = root;
         _data = data;
         _dataChunk = dataChunk;
         _index = index;
         _indexBasis = indexBasis;
+        _codeNftRoot = _root;
     }
 
 
@@ -50,6 +51,8 @@ contract NFTMarket is NftRootResolver {
 
         _countColections++;
 
+
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
 }
