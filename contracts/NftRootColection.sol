@@ -8,6 +8,7 @@ import "./NftRoot.sol";
 contract NftRootColection is NftRoot {
 
     uint256 _maxMinted = 0;
+    uint256 _id;
 
     constructor(
         TvmCell codeData, 
@@ -16,7 +17,13 @@ contract NftRootColection is NftRoot {
         TvmCell codeIndexBasis,
         string name,
         string description,
-        address addrAuthor) public {
+        address addrAuthor) 
+        public {
+        optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
+        require(optSalt.hasValue(), 101);
+        (uint256 id) = optSalt.get().toSlice().decode(uint256);
+        require(msg.value >= Constants.DEPLOY);
+        tvm.accept();
         _name = name;
         _description = description;
         _addrAuthor = addrAuthor;
@@ -24,7 +31,11 @@ contract NftRootColection is NftRoot {
         _setCodeIndexBasis(codeIndexBasis);
         _setCodeData(codeData);
         _setCodeDataChunk(codeDataChunk);
+
+        id = _id;
     }
+
+
 
     function deployMetadata(
         int8 wid,

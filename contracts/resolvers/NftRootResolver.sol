@@ -14,19 +14,20 @@ contract NftRootResolver {
     }
 
     function resolveNftRoot(
-        address addrNftMarket,
-        address addrOwner
+        uint256 id,
+        address addrOwner,
+        TvmCell code
     ) public view returns (address addrNftRoot) {
-        TvmCell code = _buildNftRootCode(addrNftMarket);
+        TvmCell code = _buildNftRootCode(id, code);
         TvmCell state = _buildNftRootCodeState(code, addrOwner);
         uint256 hashState = tvm.hash(state);
         addrNftRoot = address.makeAddrStd(0, hashState);
     }
 
-    function _buildNftRootCode(address addrNftMarket) internal virtual view returns (TvmCell) {
+    function _buildNftRootCode(uint256 id, TvmCell code) internal virtual view returns (TvmCell) {
         TvmBuilder salt;
-        salt.store(addrNftMarket);
-        return tvm.setCodeSalt(_codeNftRoot, salt.toCell());
+        salt.store(id);
+        return tvm.setCodeSalt(code, salt.toCell());
     }
 
     function _buildNftRootCodeState(
