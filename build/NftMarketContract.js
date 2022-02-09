@@ -1,7 +1,7 @@
-const NftMarketContract = {
+const NFTMarketContract = {
     abi: {
         "ABI version": 2,
-        "version": "2.2",
+        "version": "2.1",
         "header": [
             "pubkey",
             "time",
@@ -60,7 +60,16 @@ const NftMarketContract = {
             },
             {
                 "name": "resolveCodeHashNftRoot",
-                "inputs": [],
+                "inputs": [
+                    {
+                        "name": "code",
+                        "type": "cell"
+                    },
+                    {
+                        "name": "id",
+                        "type": "uint256"
+                    }
+                ],
                 "outputs": [
                     {
                         "name": "codeHashData",
@@ -72,12 +81,12 @@ const NftMarketContract = {
                 "name": "resolveNftRoot",
                 "inputs": [
                     {
-                        "name": "addrNftMarket",
+                        "name": "addrOwner",
                         "type": "address"
                     },
                     {
-                        "name": "addrOwner",
-                        "type": "address"
+                        "name": "id",
+                        "type": "uint128"
                     }
                 ],
                 "outputs": [
@@ -108,8 +117,8 @@ const NftMarketContract = {
                 "type": "cell"
             },
             {
-                "name": "_root",
-                "type": "cell"
+                "name": "NftColectionsOwner",
+                "type": "address[]"
             },
             {
                 "name": "_data",
@@ -129,12 +138,12 @@ const NftMarketContract = {
             },
             {
                 "name": "_countColections",
-                "type": "uint256"
+                "type": "uint128"
             }
         ]
     },
-    tvc: "te6ccgECJAEABFwAAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gshBwQjAQAFAvztRNDXScMB+GaNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4aSHbPNMAAY4agQIA1xgg+QEB0wABlNP/AwGTAvhC4vkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwEdBgEI2zzyPAgDUu1E0NdJwwH4ZiLQ0wP6QDD4aak4ANwhxwDjAiHXDR/yvCHjAwHbPPI8ICAIAiggghA821Wiu+MCIIIQTIB5WLvjAgwJAiggghA+xhjyuuMCIIIQTIB5WLrjAhEKA4gw+Eby4Ez4Qm7jACGT1NHQ3vpA1NHQ+kDR2zwhjh8j0NMB+kAwMcjPhyDOcc8LYQHIz5MyAeVizs3JcPsAkTDi4wDyAB4LEwImAds8Ads8+QBwyM+GQMoHy//J0BUQBE4gggvtppu64wIgghANf5lIuuMCIIIQGHqZjrrjAiCCEDzbVaK64wIbEhENAyow+Eby4Ez4Qm7jANTU0ds8MNs88gAeDhwD8Gim/mCCEAX14QCCEDuaygCgtX++8uBk+CjbPPhJ2zz4SVoB+E/4TvhN+ExVBiD5AMjPigBAy//Iz4WIzxONBJDuaygAAAAAAAAAAAAAAAAAAcDPFiHbPMzPg1VgyM+RBAkHWszMzFUwyMzMzM7Nzclw+wD4UKT4cBUQDwA00NIAAZPSBDHe0gABk9IBMd70BPQE9ATRXwMAQnDIy/9wbYBA9EMBcViAQPQWyPQAyQHIz4SA9AD0AM+ByQMmMPhG8uBM+EJu4wDR2zww2zzyAB4jHAOAMPhG8uBM+EJu4wDR2zwhjigj0NMB+kAwMcjPhyDOjQQAAAAAAAAAAAAAAAAI1/mUiM8Wy//JcPsAkTDi4wDyAB4UEwAo7UTQ0//TPzH4Q1jIy//LP87J7VQBDPgo2zz5ABUBEsjO+ErQAcnbPBYCFiGLOK2zWMcFioriGBcBCAHbPMkZASYB1NQwEtDbPMjPjits1hLMzxHJGQFm1YsvSkDXJvQE0wkxINdKkdSOgOKLL0oY1yYwAcjPi9KQ9ACAIM8LCc+L0obMEszIzxHOGgEEiAEjAlow+EJu4wD4RvJz1NTU1NHQ1NTR+ABVA/hrVQL4bFj4bQH4bvhv+Ev4ats88gAdHABQ+FD4T/hO+E34TPhL+Er4Q/hCyMv/yz/Pg8zMzFUwyMzMzMv/zcntVAIW7UTQ10nCAY6A4w0fHgBQ7UTQ0//TP9MAMdTU1NTR0NTU1NP/0fhw+G/4bvht+Gz4a/hq+GP4YgFMcO1E0PQFiF9QcPhw+G/4bvht+Gz4a/hqgED0DvK91wv/+GJw+GMjAAr4RvLgTAIK9KQg9KEjIgAUc29sIDAuNTcuMwAA",
-    code: "te6ccgECIQEABC8ABCSK7VMg4wMgwP/jAiDA/uMC8gseBAEgAQACAvztRNDXScMB+GaNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4aSHbPNMAAY4agQIA1xgg+QEB0wABlNP/AwGTAvhC4vkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwEaAwEI2zzyPAUDUu1E0NdJwwH4ZiLQ0wP6QDD4aak4ANwhxwDjAiHXDR/yvCHjAwHbPPI8HR0FAiggghA821Wiu+MCIIIQTIB5WLvjAgkGAiggghA+xhjyuuMCIIIQTIB5WLrjAg4HA4gw+Eby4Ez4Qm7jACGT1NHQ3vpA1NHQ+kDR2zwhjh8j0NMB+kAwMcjPhyDOcc8LYQHIz5MyAeVizs3JcPsAkTDi4wDyABsIEAImAds8Ads8+QBwyM+GQMoHy//J0BINBE4gggvtppu64wIgghANf5lIuuMCIIIQGHqZjrrjAiCCEDzbVaK64wIYDw4KAyow+Eby4Ez4Qm7jANTU0ds8MNs88gAbCxkD8Gim/mCCEAX14QCCEDuaygCgtX++8uBk+CjbPPhJ2zz4SVoB+E/4TvhN+ExVBiD5AMjPigBAy//Iz4WIzxONBJDuaygAAAAAAAAAAAAAAAAAAcDPFiHbPMzPg1VgyM+RBAkHWszMzFUwyMzMzM7Nzclw+wD4UKT4cBINDAA00NIAAZPSBDHe0gABk9IBMd70BPQE9ATRXwMAQnDIy/9wbYBA9EMBcViAQPQWyPQAyQHIz4SA9AD0AM+ByQMmMPhG8uBM+EJu4wDR2zww2zzyABsgGQOAMPhG8uBM+EJu4wDR2zwhjigj0NMB+kAwMcjPhyDOjQQAAAAAAAAAAAAAAAAI1/mUiM8Wy//JcPsAkTDi4wDyABsREAAo7UTQ0//TPzH4Q1jIy//LP87J7VQBDPgo2zz5ABIBEsjO+ErQAcnbPBMCFiGLOK2zWMcFioriFRQBCAHbPMkWASYB1NQwEtDbPMjPjits1hLMzxHJFgFm1YsvSkDXJvQE0wkxINdKkdSOgOKLL0oY1yYwAcjPi9KQ9ACAIM8LCc+L0obMEszIzxHOFwEEiAEgAlow+EJu4wD4RvJz1NTU1NHQ1NTR+ABVA/hrVQL4bFj4bQH4bvhv+Ev4ats88gAaGQBQ+FD4T/hO+E34TPhL+Er4Q/hCyMv/yz/Pg8zMzFUwyMzMzMv/zcntVAIW7UTQ10nCAY6A4w0cGwBQ7UTQ0//TP9MAMdTU1NTR0NTU1NP/0fhw+G/4bvht+Gz4a/hq+GP4YgFMcO1E0PQFiF9QcPhw+G/4bvht+Gz4a/hqgED0DvK91wv/+GJw+GMgAAr4RvLgTAIK9KQg9KEgHwAUc29sIDAuNTcuMwAA",
-    codeHash: "947f91de25a62d2318b095ffbab15c41d9588e118afb483d0683f8a0b37f4f67",
+    tvc: "te6ccgECJAEABJ8AAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gshBwQjAQAFAvztRNDXScMB+GaNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4aSHbPNMAAY4agQIA1xgg+QEB0wABlNP/AwGTAvhC4vkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwEcBgEO2zz4R27yfAgDWO1E0NdJwwH4ZiLQ0wP6QDD4aak4ANwhxwDjAiHXDR/yvCHjAwHbPPhHbvJ8ICAIAiggghA+xhjyu+MCIIIQTk6xMLvjAg4JAiggghBFDxGWuuMCIIIQTk6xMLrjAgwKA5Yw+Eby4Ez4Qm7jAPpBldTR0PpA39cNf5XU0dDTf9/R2zwhjh8j0NMB+kAwMcjPhyDOcc8LYQHIz5M5OsTCzs3JcPsAkTDi4wB/+GcfCxsCbo0IYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABNs8Wts8+QBwyM+GQMoHy//J0DETEgOYMPhG8uBM+EJu4wDU1w3/ldTR0NP/39HbPCGOKCPQ0wH6QDAxyM+HIM6NBAAAAAAAAAAAAAAAAAxQ8RlozxbL/8lw+wCRMOLjAH/4Zx8NGwEM2zz5AGwhEwROIIIL7aabuuMCIIIQGHqZjrrjAiCCEDzbVaK64wIgghA+xhjyuuMCGhkPGQMqMPhG8uBM+EJu4wDU1NHbPNs8f/hnHxAbA/5opv5gghAF9eEAghA7msoAoLV/vvLgZNs8+En4UNs8+ElYVQL4T/hO+E34TFUGIPkAyM+KAEDL/8jPhYjPE40EkO5rKAAAAAAAAAAAAAAAAAABwM8WzM+DVWDIz5EECQdazMzMVTDIzMzMzs3NyXD7APhQpLV/+HD4ScjPhYjOExIRABKAb89AyYBA+wAAWG1wyMv/cFiAQPRDWHFYgED0FgHIy/9yWIBA9EPI9ADJAcjPhID0APQAz4HJARb4KMjO+ErQAcnbPBQCFiGLOK2zWMcFioriFhUBCAHbPMkXASYB1NQwEtDbPMjPjits1hLMzxHJFwFm1YsvSkDXJvQE0wkxINdKkdSOgOKLL0oY1yYwAcjPi9KQ9ACAIM8LCc+L0obMEszIzxHOGAEEiAEjAyYw+Eby4Ez4Qm7jANHbPNs8f/hnHyMbAlAw+EJu4wD4RvJz1NTU1NHQ1NTR+ABVAvhsWPhtAfhu+G/4ats8f/hnHBsAXvhQ+E/4TvhN+Ez4S/hK+EP4QsjL/8s/z4PMAW8iAssf9ADMVTDIzMzMy3/Nye1UAhbtRNDXScIBio6A4h8dBCpw7UTQ9AWI+GpwbW8C+GuI+GyI+G0jIyMeAjSI+G6I+G9w+HCAQPQO8r3XC//4YnD4Y3D4cCMjAF7tRNDT/9M/0wAx1NMf9ARZbwIB1NTR0NTU1NN/0fhw+G/4bvht+Gz4a/hq+GP4YgAK+Eby4EwCCvSkIPShIyIAFHNvbCAwLjQ5LjAAAA==",
+    code: "te6ccgECIQEABHIABCSK7VMg4wMgwP/jAiDA/uMC8gseBAEgAQACAvztRNDXScMB+GaNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4aSHbPNMAAY4agQIA1xgg+QEB0wABlNP/AwGTAvhC4vkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwEZAwEO2zz4R27yfAUDWO1E0NdJwwH4ZiLQ0wP6QDD4aak4ANwhxwDjAiHXDR/yvCHjAwHbPPhHbvJ8HR0FAiggghA+xhjyu+MCIIIQTk6xMLvjAgsGAiggghBFDxGWuuMCIIIQTk6xMLrjAgkHA5Yw+Eby4Ez4Qm7jAPpBldTR0PpA39cNf5XU0dDTf9/R2zwhjh8j0NMB+kAwMcjPhyDOcc8LYQHIz5M5OsTCzs3JcPsAkTDi4wB/+GccCBgCbo0IYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABNs8Wts8+QBwyM+GQMoHy//J0DEQDwOYMPhG8uBM+EJu4wDU1w3/ldTR0NP/39HbPCGOKCPQ0wH6QDAxyM+HIM6NBAAAAAAAAAAAAAAAAAxQ8RlozxbL/8lw+wCRMOLjAH/4ZxwKGAEM2zz5AGwhEAROIIIL7aabuuMCIIIQGHqZjrrjAiCCEDzbVaK64wIgghA+xhjyuuMCFxYMFgMqMPhG8uBM+EJu4wDU1NHbPNs8f/hnHA0YA/5opv5gghAF9eEAghA7msoAoLV/vvLgZNs8+En4UNs8+ElYVQL4T/hO+E34TFUGIPkAyM+KAEDL/8jPhYjPE40EkO5rKAAAAAAAAAAAAAAAAAABwM8WzM+DVWDIz5EECQdazMzMVTDIzMzMzs3NyXD7APhQpLV/+HD4ScjPhYjOEA8OABKAb89AyYBA+wAAWG1wyMv/cFiAQPRDWHFYgED0FgHIy/9yWIBA9EPI9ADJAcjPhID0APQAz4HJARb4KMjO+ErQAcnbPBECFiGLOK2zWMcFioriExIBCAHbPMkUASYB1NQwEtDbPMjPjits1hLMzxHJFAFm1YsvSkDXJvQE0wkxINdKkdSOgOKLL0oY1yYwAcjPi9KQ9ACAIM8LCc+L0obMEszIzxHOFQEEiAEgAyYw+Eby4Ez4Qm7jANHbPNs8f/hnHCAYAlAw+EJu4wD4RvJz1NTU1NHQ1NTR+ABVAvhsWPhtAfhu+G/4ats8f/hnGRgAXvhQ+E/4TvhN+Ez4S/hK+EP4QsjL/8s/z4PMAW8iAssf9ADMVTDIzMzMy3/Nye1UAhbtRNDXScIBio6A4hwaBCpw7UTQ9AWI+GpwbW8C+GuI+GyI+G0gICAbAjSI+G6I+G9w+HCAQPQO8r3XC//4YnD4Y3D4cCAgAF7tRNDT/9M/0wAx1NMf9ARZbwIB1NTR0NTU1NN/0fhw+G/4bvht+Gz4a/hq+GP4YgAK+Eby4EwCCvSkIPShIB8AFHNvbCAwLjQ5LjAAAA==",
+    codeHash: "c2cbaa4b0158e148223cb9a1df724bea9305c0007732ecacd9c7e3db9e4e3c54",
 };
-module.exports = { NftMarketContract };
+module.exports = { NFTMarketContract };

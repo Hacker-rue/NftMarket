@@ -17,7 +17,7 @@ contract NFTMarket is NftRootResolver {
     TvmCell _index;
     TvmCell _indexBasis;
 
-    uint256 _countColections;
+    uint128 _countColections = 0;
 
 
     constructor (TvmCell root, TvmCell data, TvmCell dataChunk, TvmCell index, TvmCell indexBasis) public {
@@ -41,8 +41,8 @@ contract NFTMarket is NftRootResolver {
     function deployColection(string name, string description) public {
         require(msg.value >= Constants.PROCESS_MIN + Constants.DEPLOY);
 
-        TvmCell codeNftRoot = _buildNftRootCode(_countColections, _codeNftRoot);
-        TvmCell stateNftRoot = _buildNftRootCodeState(codeNftRoot, msg.sender);
+        TvmCell codeNftRoot = _buildNftRootCode();
+        TvmCell stateNftRoot = _buildNftRootCodeState(codeNftRoot, msg.sender, _countColections);
 
         new NftRootColection{
             stateInit: stateNftRoot,
@@ -52,7 +52,7 @@ contract NFTMarket is NftRootResolver {
         _countColections++;
 
 
-        //msg.sender.transfer({value: 0, flag: 64});
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
 }

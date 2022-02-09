@@ -8,7 +8,9 @@ import "./NftRoot.sol";
 contract NftRootColection is NftRoot {
 
     uint256 _maxMinted = 0;
-    uint256 _id;
+    uint256 static _id;
+
+    address _addrCreator;
 
     constructor(
         TvmCell codeData, 
@@ -21,18 +23,25 @@ contract NftRootColection is NftRoot {
         public {
         optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
         require(optSalt.hasValue(), 101);
-        (uint256 id) = optSalt.get().toSlice().decode(uint256);
+        (address addrRoot) = optSalt.get().toSlice().decode(address);
         require(msg.value >= Constants.DEPLOY);
-        tvm.accept();
+        tvm.rawReserve(0.2 ton, 0);
+
         _name = name;
         _description = description;
         _addrAuthor = addrAuthor;
-        _setCodeIndex(codeIndex);
-        _setCodeIndexBasis(codeIndexBasis);
-        _setCodeData(codeData);
-        _setCodeDataChunk(codeDataChunk);
+        _codeIndex = codeIndex;
+        _codeIndexBasis = codeIndexBasis;
+        _codeData = codeData;
+        _codeDataChunk = codeDataChunk;
 
-        id = _id;
+        _addrCreator = addrRoot;
+
+        _inited = true;
+
+        deployBasis();
+
+        _addrOwner.transfer({value: 0, flag: 128});
     }
 
 

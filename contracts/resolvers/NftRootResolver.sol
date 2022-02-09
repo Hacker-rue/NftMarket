@@ -10,33 +10,33 @@ contract NftRootResolver {
     TvmCell _codeNftRoot;
 
     function resolveCodeHashNftRoot(TvmCell code, uint256 id) public view returns (uint256 codeHashData) {
-        return tvm.hash(_buildNftRootCode(id, code));
+        return tvm.hash(_buildNftRootCode());
     }
 
     function resolveNftRoot(
-        uint256 id,
         address addrOwner,
-        TvmCell code
+        uint128 id
     ) public view returns (address addrNftRoot) {
-        TvmCell _code = _buildNftRootCode(id, code);
-        TvmCell state = _buildNftRootCodeState(_code, addrOwner);
+        TvmCell code = _buildNftRootCode();
+        TvmCell state = _buildNftRootCodeState(code, addrOwner, id);
         uint256 hashState = tvm.hash(state);
         addrNftRoot = address.makeAddrStd(0, hashState);
     }
 
-    function _buildNftRootCode(uint256 id, TvmCell code) internal virtual view returns (TvmCell) {
+    function _buildNftRootCode() internal virtual view returns (TvmCell) {
         TvmBuilder salt;
-        salt.store(id);
-        return tvm.setCodeSalt(code, salt.toCell());
+        salt.store(address(this));
+        return tvm.setCodeSalt(_codeNftRoot, salt.toCell());
     }
 
     function _buildNftRootCodeState(
         TvmCell code,
-        address addrOwner
+        address addrOwner,
+        uint128 id
     ) internal virtual pure returns (TvmCell) {
         return tvm.buildStateInit({
             contr: NftRootColection,
-            varInit: {_addrOwner: addrOwner},
+            varInit: {_addrOwner: addrOwner, _id: id},
             code: code
         });
     }
