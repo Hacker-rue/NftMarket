@@ -1,4 +1,4 @@
-pragma ton-solidity >= 0.52.0;
+pragma ton-solidity 0.49.0;
 
 pragma AbiHeader time;
 pragma AbiHeader expire;
@@ -40,7 +40,7 @@ contract NftRootColection is NftRoot {
     function deployMetadata(
         int8 wid,
         string name,
-        string descriprion,
+        string description,
         uint256 contentHash,
         string mimeType,
         uint8 chunks,
@@ -60,7 +60,7 @@ contract NftRootColection is NftRoot {
             value: Constants.DEPLOY
         }(
             name,
-            descriprion,
+            description,
             address(this),
             msg.sender,
             contentHash,
@@ -103,7 +103,7 @@ contract NftRootColection is NftRoot {
         string description,
         string icon,
         uint128 totalSupply,
-        uint128 maxMinted,
+        uint256 maxMinted,
         address addrAuthor,
         address addrOwner
     ) {

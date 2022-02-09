@@ -1,4 +1,4 @@
-pragma ton-solidity >= 0.52.0;
+pragma ton-solidity 0.49.0;
 
 library Constants {
     uint128 constant PROCESS_MIN = 0.1 ton;

@@ -1,0 +1,79 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"root","type":"cell"},
+				{"name":"data","type":"cell"},
+				{"name":"dataChunk","type":"cell"},
+				{"name":"index","type":"cell"},
+				{"name":"indexBasis","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Buy",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "putOnSale",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployColection",
+			"inputs": [
+				{"name":"name","type":"string"},
+				{"name":"description","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resolveCodeHashNftRoot",
+			"inputs": [
+				{"name":"code","type":"cell"},
+				{"name":"id","type":"uint256"}
+			],
+			"outputs": [
+				{"name":"codeHashData","type":"uint256"}
+			]
+		},
+		{
+			"name": "resolveNftRoot",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"addrOwner","type":"address"},
+				{"name":"code","type":"cell"}
+			],
+			"outputs": [
+				{"name":"addrNftRoot","type":"address"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_codeNftRoot","type":"cell"},
+		{"name":"NftColectionsOwner","type":"address[]"},
+		{"name":"_data","type":"cell"},
+		{"name":"_dataChunk","type":"cell"},
+		{"name":"_index","type":"cell"},
+		{"name":"_indexBasis","type":"cell"},
+		{"name":"_countColections","type":"uint256"}
+	]
+}

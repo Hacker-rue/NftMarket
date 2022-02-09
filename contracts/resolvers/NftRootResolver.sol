@@ -1,4 +1,4 @@
-pragma ton-solidity >=0.52.0;
+pragma ton-solidity 0.49.0;
 
 pragma AbiHeader time;
 pragma AbiHeader expire;
@@ -9,8 +9,8 @@ contract NftRootResolver {
 
     TvmCell _codeNftRoot;
 
-    function resolveCodeHashNftRoot() public view returns (uint256 codeHashData) {
-        return tvm.hash(_buildNftRootCode(address(this)));
+    function resolveCodeHashNftRoot(TvmCell code, uint256 id) public view returns (uint256 codeHashData) {
+        return tvm.hash(_buildNftRootCode(id, code));
     }
 
     function resolveNftRoot(
@@ -18,8 +18,8 @@ contract NftRootResolver {
         address addrOwner,
         TvmCell code
     ) public view returns (address addrNftRoot) {
-        TvmCell code = _buildNftRootCode(id, code);
-        TvmCell state = _buildNftRootCodeState(code, addrOwner);
+        TvmCell _code = _buildNftRootCode(id, code);
+        TvmCell state = _buildNftRootCodeState(_code, addrOwner);
         uint256 hashState = tvm.hash(state);
         addrNftRoot = address.makeAddrStd(0, hashState);
     }

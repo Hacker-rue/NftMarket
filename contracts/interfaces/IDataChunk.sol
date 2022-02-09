@@ -1,4 +1,4 @@
-pragma ton-solidity >= 0.52.0;
+pragma ton-solidity 0.49.0;
 
 interface IDataChunk {
     function getInfo() external view returns (
