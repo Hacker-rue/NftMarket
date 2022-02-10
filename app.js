@@ -26,21 +26,34 @@ async function main() {
     //     client: client
     // })
 
-    var NftMarket = new Account(NFTMarketContract, {
-        signer: signerKeys(await TonClient.default.crypto.generate_random_sign_keys()),
+    // var NftMarket = new Account(NFTMarketContract, {
+    //     signer: signerKeys(await TonClient.default.crypto.generate_random_sign_keys()),
+    //     client: client
+    // })
+
+    // ress = await NftMarket.deploy({initFunctionName: "constructor", initInput: {
+    //     root: NftRootColectionContract.code,
+    //     data: DataContract.code,
+    //     dataChunk: DataChunkContract.code,
+    //     index: IndexContract.code,
+    //     indexBasis: IndexBasisContract.code
+    // },useGiver: true})
+
+    // console.log(ress)
+    // console.log(NftMarket)
+
+    var Colection = new Account(NftRootColectionContract, {
+        address: "0:8c7e5e97b5ebffb9659cc7914c6ee6f59d5c3d6a9536628ab4ea2288aed38fb2",
+        signer: signerNone(),
         client: client
     })
 
-    ress = await NftMarket.deploy({initFunctionName: "constructor", initInput: {
-        root: NftRootColectionContract.code,
-        data: DataContract.code,
-        dataChunk: DataChunkContract.code,
-        index: IndexContract.code,
-        indexBasis: IndexBasisContract.code
-    },useGiver: true})
-
-    console.log(ress)
-    console.log(NftMarket)
+    try {
+        ress = await Colection.runLocal("getInfo");
+        console.log(ress)
+    } catch(er) {
+        console.log(er)
+    }
 
     // try {
     //     ress = await NftMarket.runLocal("resolveNftRoot", {

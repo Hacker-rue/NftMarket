@@ -24,7 +24,6 @@ contract NftRootColection is NftRoot {
         optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
         require(optSalt.hasValue(), 101);
         (address addrRoot) = optSalt.get().toSlice().decode(address);
-        require(msg.value >= Constants.DEPLOY);
         tvm.rawReserve(0.2 ton, 0);
 
         _name = name;

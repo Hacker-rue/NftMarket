@@ -32,73 +32,7 @@ abstract contract NftRoot is DataResolver, IndexResolver, INftRoot, Checks {
     TvmCell _codeDataChunk;
     TvmCell _codeIndexBasis;
 
-    uint8 constant CHECK_CODE_INDEX = 1;
-    uint8 constant CHECK_CODE_INDEX_BASIS = 2;
-    uint8 constant CHECK_CODE_DATA = 4;
-    uint8 constant CHECK_CODE_DATA_CHUNK = 8;
-
-    function _createChecks() internal inline {
-        _checkList =
-            CHECK_CODE_INDEX |
-            CHECK_CODE_INDEX_BASIS |
-            CHECK_CODE_DATA |
-            CHECK_CODE_DATA_CHUNK;
-    }
-
-    function setCodeIndex(TvmCell code) public {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-        _setCodeIndex(code);
-        msg.sender.transfer({ value: 0, flag: 64 });
-    }
-    function _setCodeIndex(TvmCell code) internal inline {
-        _codeIndex = code;
-        _passCheck(CHECK_CODE_INDEX);
-        _onInit();
-    }
     
-    function setCodeIndexBasis(TvmCell code) public {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-        _setCodeIndexBasis(code);
-        msg.sender.transfer({ value: 0, flag: 64 });
-    }
-    function _setCodeIndexBasis(TvmCell code) internal inline {
-        _codeIndexBasis = code;
-        _passCheck(CHECK_CODE_INDEX_BASIS);
-        _onInit();
-    }
-
-    function setCodeData(TvmCell code) public {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-        _setCodeData(code);
-        msg.sender.transfer({ value: 0, flag: 64 });
-    }
-    function _setCodeData(TvmCell code) internal inline {
-        _codeData = code;
-        _passCheck(CHECK_CODE_DATA);
-        _onInit();
-    }
-
-    function setCodeDataChunk(TvmCell code) public {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-        _setCodeDataChunk(code);
-        msg.sender.transfer({ value: 0, flag: 64 });
-    }
-    function _setCodeDataChunk(TvmCell code) internal inline {
-        _codeDataChunk = code;
-        _passCheck(CHECK_CODE_DATA_CHUNK);
-        _onInit();
-    }
-
-    function _onInit() internal {
-        if(_isCheckListEmpty() && !_inited) {
-            _inited = true;
-            deployBasis();
-        }
-    }
 
     function deployBasis() internal inline {
         TvmCell state = tvm.buildStateInit({

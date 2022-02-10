@@ -11,7 +11,6 @@ import './libraries/Constants.sol';
 
 contract Data is IData, IndexResolver, DataChunkResolver {
 
-    string _version = "2";
     string _name;
     string _descriprion;
     address _addrOwner;
@@ -30,10 +29,6 @@ contract Data is IData, IndexResolver, DataChunkResolver {
     bool public _deployed;
 
     uint128 _royalty;
-    uint128 _royaltyMin;
-
-    bool _onSale;
-    uint128 _price;
 
     constructor(
         string name,
@@ -74,52 +69,18 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         deployIndex(addrOwner);
     }
 
-    function setRoyalty(uint128 royalty, uint128 royaltyMin) public override {
+    function setRoyalty(uint128 royalty) public override {
         require(msg.sender == _addrAuthor, Errors.INVALID_CALLER);
         require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
         require(_royalty <= 100000, Errors.INVALID_ARGUMENTS);
-        require(_royalty == 0 && _royaltyMin == 0, Errors.ROYALTY_ALREADY_SET);
+        require(_royalty == 0, Errors.ROYALTY_ALREADY_SET);
 
         _royalty = royalty;
-        _royaltyMin = royaltyMin;
 
         msg.sender.transfer({ value: 0, flag: 64 });
     }
 
-    function putOnSale(uint128 price) public override {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-
-        _price = price;
-        _onSale = true;
-
-        msg.sender.transfer({ value: 0, flag: 64 });
-    }
-
-    function removeFromSale() public override {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-        require(_onSale == true, Errors.CONTRACT_IS_NOT_ON_SALE);
-
-        _price = 0;
-        _onSale = false;
-
-        msg.sender.transfer({ value: 0, flag: 64 });
-    }
-
-    function buy() public override {
-        require(msg.sender != address(0), Errors.INVALID_CALLER);
-        require(
-            msg.value >= (uint256(_price * _royalty / 100000) < _royaltyMin ? _royaltyMin : _price * _royalty / 100000) + Constants.PROCESS_MIN,
-            Errors.INVALID_VALUE
-        );
-        require(_onSale == true, Errors.CONTRACT_IS_NOT_ON_SALE);
-
-        _price = 0;
-        _onSale = false;
-
-        // msg.sender.transfer({ value: 0, flag: 64 });
-    }
+    
 
     function transfer(address addrTo) public override {
         transferValidation();
@@ -175,7 +136,6 @@ contract Data is IData, IndexResolver, DataChunkResolver {
     }
 
     function getInfo() public view returns (
-        string version,
         string name,
         string descriprion,
         address addrOwner,
@@ -188,10 +148,8 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         uint128 chunkSize,
         uint128 size,
         Meta meta,
-        uint128 royalty,
-        uint128 royaltyMin
+        uint128 royalty
     ) {
-        version = _version;
         name = _name;
         descriprion = _descriprion;
         addrOwner = _addrOwner;
@@ -205,6 +163,5 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         size = _size;
         meta = _meta;
         royalty = _royalty;
-        royaltyMin = _royaltyMin;
     }
 }

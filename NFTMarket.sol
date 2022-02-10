@@ -55,4 +55,10 @@ contract NFTMarket is NftRootResolver {
         msg.sender.transfer({value: 0, flag: 64});
     }
 
+    function getInfo() public view returns(
+        uint128 countColections
+    ) {
+        countColections = _countColections;
+    }
+
 }
