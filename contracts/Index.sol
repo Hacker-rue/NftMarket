@@ -40,4 +40,6 @@ contract Index is IIndex {
         require(msg.sender == _addrData);
         selfdestruct(_addrData);
     }
+
+    
 }

@@ -31,7 +31,7 @@ contract NftRootBase is NftRoot {
         uint128 chunkSize,
         uint128 size,
         Meta meta
-    ) public override {
+    ) public {
         require(_inited == true, Errors.CONTRACT_NOT_INITED);
 
         mintNftValidation();
@@ -54,9 +54,9 @@ contract NftRootBase is NftRoot {
             chunks,
             chunkSize,
             size,
-            meta,
             _codeIndex,
-            _codeDataChunk
+            _codeDataChunk,
+            meta
         );
 
         _totalSupply++;

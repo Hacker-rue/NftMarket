@@ -10,6 +10,8 @@ contract NftRootColection is NftRoot {
     uint256 _maxMinted = 0;
     uint256 static _id;
 
+    uint128 _fee;
+
     address _addrCreator;
 
     constructor(
@@ -45,6 +47,15 @@ contract NftRootColection is NftRoot {
     }
 
 
+    function setFee(uint128 fee) public onlyOwner {
+        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
+
+        _fee = fee;
+
+        msg.sender.transfer({value:0, flag: 64});
+    }
+
+
 
     function deployMetadata(
         int8 wid,
@@ -56,10 +67,9 @@ contract NftRootColection is NftRoot {
         uint128 chunkSize,
         uint128 size,
         Meta meta
-    ) public {
+    ) public onlyOwner() {
         require(_inited == true, Errors.CONTRACT_NOT_INITED);
         require(msg.value >= Constants.DEPLOY + Constants.PROCESS_MIN, Errors.INVALID_VALUE);
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
 
         TvmCell codeData = _buildDataCode(address(this));
         TvmCell stateData = _buildDataState(codeData, _totalSupply);
@@ -83,6 +93,8 @@ contract NftRootColection is NftRoot {
         );
 
         _maxMinted++;
+
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
     function mintNft() public {
@@ -90,20 +102,24 @@ contract NftRootColection is NftRoot {
         mintNftValidation();
         mintNftLogic();
 
-
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
     function mintNftLogic() internal inline override {
         address addrData = resolveData(address(this), _totalSupply);
 
-        Data(addrData).transfer{value: Constants.DEPLOY_SM}(msg.sender);
+        Data(addrData).transfer{value: Constants.DEPLOY_SM + 0.1 ton}(msg.sender);
+
+        _addrAuthor.transfer({value: _fee / 100 * 90});
+
+        address(this).transfer({value: _fee /100 * 10});
 
         _totalSupply++;
         
     }
 
     function mintNftValidation() internal inline override {
-        require(msg.value >= Constants.PROCESS_MIN + Constants.DEPLOY_SM, Errors.INVALID_VALUE);
+        require(msg.value >= Constants.PROCESS_MIN + Constants.DEPLOY_SM + _fee, Errors.INVALID_VALUE);
         require(_totalSupply < _maxMinted);
     }
 
@@ -123,6 +139,11 @@ contract NftRootColection is NftRoot {
         maxMinted = _maxMinted;
         addrAuthor = _addrAuthor;
         addrOwner = _addrOwner;
+    }
+
+    modifier onlyOwner() virtual {
+        require(msg.sender == _addrOwner);
+        _;
     }
 
 

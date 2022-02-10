@@ -5,12 +5,13 @@ pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 import "./contracts/NftRootColection.sol";
+import "./contracts/NftRootBase.sol";
 import "./contracts/resolvers/NftRootResolver.sol";
 import "./contracts/libraries/Constants.sol";
 
 contract NFTMarket is NftRootResolver {
 
-    address[] NftColectionsOwner;
+    address oneNFTRoot;
 
     TvmCell _data;
     TvmCell _dataChunk;
@@ -20,13 +21,15 @@ contract NFTMarket is NftRootResolver {
     uint128 _countColections = 0;
 
 
-    constructor (TvmCell root, TvmCell data, TvmCell dataChunk, TvmCell index, TvmCell indexBasis) public {
+    constructor (TvmCell root, TvmCell data, TvmCell dataChunk, TvmCell index, TvmCell indexBasis, TvmCell oneRoot) public {
         tvm.accept();
         _data = data;
         _dataChunk = dataChunk;
         _index = index;
         _indexBasis = indexBasis;
         _codeNftRoot = root;
+
+
     }
 
 
@@ -53,6 +56,18 @@ contract NFTMarket is NftRootResolver {
 
 
         msg.sender.transfer({value: 0, flag: 64});
+    }
+
+    function deployOneNftRoot(TvmCell oneRoot) internal inline {
+        TvmBuilder salt;
+        salt.store(address(this));
+        TvmCell code = tvm.buildStateInit({
+            contr: NftRootBase,
+            varInit: {_addrOwner: address(this)},
+            code: tvm.setCodeSalt(oneRoot, salt.toCell())
+        });
+
+        
     }
 
 }
