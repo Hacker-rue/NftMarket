@@ -9,7 +9,7 @@ contract NftRootResolver {
 
     TvmCell _codeNftRoot;
 
-    function resolveCodeHashNftRoot(TvmCell code, uint256 id) public view returns (uint256 codeHashData) {
+    function resolveCodeHashNftRoot() public view returns (uint256 codeHashData) {
         return tvm.hash(_buildNftRootCode());
     }
 

@@ -6,10 +6,13 @@ TonClient.useBinaryLibrary(libNode)
 
 const { NFTMarketContract } = require('./build/NFTMarketContract')
 const { NftRootColectionContract } = require('./build/NftRootColectionContract')
+const { NftRootBaseContract } = require("./build/NftRootBaseContract")
 const { DataContract } = require("./build/DataContract")
 const { DataChunkContract } = require('./build/DataChunkContract')
 const { IndexContract } = require('./build/IndexContract')
 const { IndexBasisContract } = require('./build/IndexBasisContract')
+const { IndexOfferContract } = require('./build/IndexOfferContract')
+const { OfferContract } = require('./build/OfferContract')
 
 
 const client = new TonClient({
@@ -33,10 +36,13 @@ async function main() {
 
     ress = await NftMarket.deploy({initFunctionName: "constructor", initInput: {
         root: NftRootColectionContract.code,
+        oneRoot: NftRootBaseContract.code,
         data: DataContract.code,
         dataChunk: DataChunkContract.code,
         index: IndexContract.code,
-        indexBasis: IndexBasisContract.code
+        indexBasis: IndexBasisContract.code,
+        offer: OfferContract.code,
+        indexOffer: IndexOfferContract.code
     },useGiver: true})
 
     console.log(ress)
