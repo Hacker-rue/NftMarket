@@ -30,6 +30,8 @@ contract Data is IData, IndexResolver, DataChunkResolver {
 
     uint128 _royalty;
 
+    address _addrApproved;
+
     constructor(
         string name,
         string descriprion,
@@ -80,8 +82,15 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         msg.sender.transfer({ value: 0, flag: 64 });
     }
 
-    
+    function setAddrApproved(address addrApproved) public {
+        require(msg.sender == _addrOwner);
 
+        _addrApproved == addrApproved;
+
+        msg.sender.transfer({value:0, flag: 64});
+    }
+
+    
     function transfer(address addrTo) public override {
         transferValidation();
         transferLogic();
@@ -105,12 +114,18 @@ contract Data is IData, IndexResolver, DataChunkResolver {
     }
 
     function transferValidation() internal virtual inline {
-        require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
         require(msg.value >= Constants.DEPLOY_SM, Errors.INVALID_VALUE);
-        require(_onSale != true, Errors.CONTRACT_IS_ON_SALE);
+        require(msg.sender == _addrOwner || msg.sender == _addrApproved);
+
+        // if(_addrApproved != address(0)) {
+        //     require(msg.sender == _addrApproved);
+        // } else {
+        //     require(msg.sender == _addrOwner);
+        // }
     }
 
     function transferLogic() internal virtual inline {
+        _addrApproved = address(0);
     }
 
     function deployIndex(address owner) internal {
@@ -133,6 +148,14 @@ contract Data is IData, IndexResolver, DataChunkResolver {
             (chunk);
 
         // msg.sender.transfer({ value: 0, flag: 64 });
+    }
+
+    function getAddrOwner() public view responsible returns(address) {
+        return{value:0, bounce: false, flag: 64} _addrOwner;
+    }
+
+    function getAddrApproved() public view responsible returns(address) {
+        return{value: 0, bounce: false, flag: 64} _addrApproved;
     }
 
     function getInfo() public view returns (

@@ -1,24 +1,41 @@
 pragma ton-solidity 0.49.0;
 
-pragma AbiHedare time;
-pragma AbiHedare expire;
+pragma AbiHeader time;
+pragma AbiHeader expire;
+
+import "../Offer.sol";
 
 contract OfferResolver {
+
+    TvmCell _codeOffer;
 
     function resolveCodeHashOffer() public view returns(uint256 codeHashOffer) {
         return tvm.hash(_buildOfferCode());
     }
 
-    function resolveAddrOffer() public view returns(address addrOffer) {
-
+    function resolveAddrOffer(address addrOwner, address addrNft) public view returns(address addrOffer) {
+        TvmCell code = _buildOfferCode();
+        TvmCell state = _buildOfferCodeState(code, addrOwner, addrNft);
+        uint256 hashState = tvm.hash(state);
+        addrOffer = address.makeAddrStd(0, hashState);
     }
 
     function _buildOfferCode() internal virtual view returns(TvmCell) {
-
+        TvmBuilder salt;
+        salt.store(address(this));
+        return tvm.setCodeSalt(_codeOffer, salt.toCell());
     }
 
-    function _buildOfferCodeState() internal virtual pure returns(TvmCell) {
-
+    function _buildOfferCodeState(
+        TvmCell code,
+        address addrOwner,
+        address addrNft
+    ) internal virtual pure returns(TvmCell) {
+        return tvm.buildStateInit({
+            contr: Offer,
+            varInit: {_addrOwner: addrOwner, _addrNft: addrNft},
+            code: code
+        });
     }
 
 }

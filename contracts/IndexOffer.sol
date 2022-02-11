@@ -10,7 +10,9 @@ contract IndexOffer {
     address _addrOwner;
     address static _addrOffer;
 
-    constructor () public {
+    address _addrNft;
+
+    constructor (address addrNft) public {
         optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
         require(optSalt.hasValue(), 101);
         (address addrMarket, address addrOwner) = optSalt
@@ -21,6 +23,8 @@ contract IndexOffer {
         tvm.accept();
         _addrMarket = addrMarket;
         _addrOwner = addrOwner;
+
+        _addrNft = addrNft;
     }
 
     function getInfo() public view returns(

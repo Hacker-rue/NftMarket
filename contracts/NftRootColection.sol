@@ -19,6 +19,7 @@ contract NftRootColection is NftRoot {
         TvmCell codeIndexBasis,
         string name,
         string description,
+        string icon,
         address addrAuthor) 
         public {
         optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
@@ -28,6 +29,7 @@ contract NftRootColection is NftRoot {
 
         _name = name;
         _description = description;
+        _icon = icon;
         _addrAuthor = addrAuthor;
         _codeIndex = codeIndex;
         _codeIndexBasis = codeIndexBasis;

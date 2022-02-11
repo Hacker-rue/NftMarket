@@ -18,7 +18,6 @@ contract NftRootBase is NftRoot {
         _description = description;
         _icon = icon;
         _addrAuthor = addrAuthor;
-        _createChecks();
     }
 
     function mintNft(
@@ -31,7 +30,7 @@ contract NftRootBase is NftRoot {
         uint128 chunkSize,
         uint128 size,
         Meta meta
-    ) public override {
+    ) public {
         require(_inited == true, Errors.CONTRACT_NOT_INITED);
 
         mintNftValidation();

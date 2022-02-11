@@ -11,8 +11,5 @@ struct Meta {
 interface IData {
     function transfer(address addrTo) external;
     function deployDataChunk(bytes chunk, uint128 chunkNumber) external;
-    function setRoyalty(uint128 royalty, uint128 royaltyMin) external;
-    function putOnSale(uint128 price) external;
-    function removeFromSale() external;
-    function buy() external;
+    function setRoyalty(uint128 royalty) external;
 }

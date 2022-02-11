@@ -6,10 +6,14 @@ pragma AbiHeader pubkey;
 
 import "./contracts/NftRootColection.sol";
 import "./contracts/NftRootBase.sol";
+
+
 import "./contracts/resolvers/NftRootResolver.sol";
+import "./contracts/resolvers/OfferResolver.sol";
+
 import "./contracts/libraries/Constants.sol";
 
-contract NFTMarket is NftRootResolver {
+contract NFTMarket is NftRootResolver, OfferResolver {
 
     address oneNFTRoot;
 
@@ -17,28 +21,40 @@ contract NFTMarket is NftRootResolver {
     TvmCell _dataChunk;
     TvmCell _index;
     TvmCell _indexBasis;
+    TvmCell _indexOffer;
 
     uint128 _countColections = 0;
 
 
-    constructor (TvmCell root, TvmCell oneRoot, TvmCell data, TvmCell dataChunk, TvmCell index, TvmCell indexBasis) public {
+    constructor (
+        TvmCell root, 
+        TvmCell oneRoot, 
+        TvmCell data, 
+        TvmCell dataChunk, 
+        TvmCell index, 
+        TvmCell indexBasis, 
+        TvmCell offer,
+        TvmCell indexOffer
+    ) public {
         tvm.accept();
         _data = data;
         _dataChunk = dataChunk;
         _index = index;
         _indexBasis = indexBasis;
         _codeNftRoot = root;
+        _codeOffer = offer;
+        _indexOffer = indexOffer;
 
-
+        deployOneNftRoot(oneRoot);
     }
 
-
-    function Buy() public {
-        
-    }
-
-    function putOnSale() public {
-
+    function putOnSale(address addrNft, uint128 price) public {
+        TvmCell code = _buildOfferCode();
+        TvmCell state = _buildOfferCodeState(code, msg.sender, addrNft);
+        new Offer{
+            stateInit: state,
+            value: 0.5 ton
+        } (price, _indexOffer);
     }
 
     function deployColection(string name, string description, string icon) public {
@@ -50,7 +66,7 @@ contract NFTMarket is NftRootResolver {
         new NftRootColection{
             stateInit: stateNftRoot,
             value: Constants.DEPLOY} 
-        (_data, _dataChunk, _index, _indexBasis, name, description, msg.sender);
+        (_data, _dataChunk, _index, _indexBasis, name, description, icon, msg.sender);
 
         _countColections++;
 
@@ -67,18 +83,25 @@ contract NFTMarket is NftRootResolver {
             code: tvm.setCodeSalt(oneRoot, salt.toCell())
         });
 
-        oneRootNft = new NftRootBase {
+        
+
+        new NftRootBase {
             stateInit: code,
             value: Constants.DEPLOY
         } (
-            
-        )
+            "test",
+            "test",
+            "test",
+            address(this)
+        );
     }
 
     function getInfo() public view returns(
-        uint128 countColections
+        uint128 countColections,
+        address oneRoot
     ) {
         countColections = _countColections;
+        oneRoot = oneNFTRoot;
     }
 
 }
