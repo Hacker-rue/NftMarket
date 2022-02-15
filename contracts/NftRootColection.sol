@@ -59,7 +59,6 @@ contract NftRootColection is NftRoot {
         Meta meta
     ) public {
         require(_inited == true, Errors.CONTRACT_NOT_INITED);
-        require(msg.value >= Constants.DEPLOY + Constants.PROCESS_MIN, Errors.INVALID_VALUE);
         require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
 
         TvmCell codeData = _buildDataCode(address(this));
@@ -104,7 +103,6 @@ contract NftRootColection is NftRoot {
     }
 
     function mintNftValidation() internal inline override {
-        require(msg.value >= Constants.PROCESS_MIN + Constants.DEPLOY_SM, Errors.INVALID_VALUE);
         require(_totalSupply < _maxMinted);
     }
 
