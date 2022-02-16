@@ -58,7 +58,6 @@ contract NFTMarket is NftRootResolver, OfferResolver {
     }
 
     function deployColection(string name, string description, string icon) public {
-        require(msg.value >= Constants.PROCESS_MIN + Constants.DEPLOY);
 
         TvmCell codeNftRoot = _buildNftRootCode();
         TvmCell stateNftRoot = _buildNftRootCodeState(codeNftRoot, msg.sender, _countColections);

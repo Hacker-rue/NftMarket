@@ -50,7 +50,6 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         require(optSalt.hasValue(), Errors.CONTRACT_CODE_NOT_SALTED);
         (address addrRoot) = optSalt.get().toSlice().decode(address);
         require(msg.sender == addrRoot, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.DEPLOY_SM, Errors.INVALID_VALUE);
 
         _name = name;
         _descriprion = descriprion;
@@ -73,7 +72,6 @@ contract Data is IData, IndexResolver, DataChunkResolver {
 
     function setRoyalty(uint128 royalty) public override {
         require(msg.sender == _addrAuthor, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.PROCESS_MIN, Errors.INVALID_VALUE);
         require(_royalty <= 100000, Errors.INVALID_ARGUMENTS);
         require(_royalty == 0, Errors.ROYALTY_ALREADY_SET);
 
@@ -114,7 +112,6 @@ contract Data is IData, IndexResolver, DataChunkResolver {
     }
 
     function transferValidation() internal virtual inline {
-        require(msg.value >= Constants.DEPLOY_SM, Errors.INVALID_VALUE);
         require(msg.sender == _addrOwner || msg.sender == _addrApproved);
 
         // if(_addrApproved != address(0)) {
@@ -140,7 +137,6 @@ contract Data is IData, IndexResolver, DataChunkResolver {
 
     function deployDataChunk(bytes chunk, uint128 chunkNumber) public override {
         require(msg.sender == _addrAuthor, Errors.INVALID_CALLER);
-        require(msg.value >= Constants.DEPLOY_MIN + Constants.PROCESS_MIN, Errors.INVALID_VALUE);
         TvmCell state = _buildDataChunkState(address(this), chunkNumber);
 
         new DataChunk

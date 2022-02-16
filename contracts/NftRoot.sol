@@ -47,7 +47,7 @@ abstract contract NftRoot is DataResolver, IndexResolver, INftRoot, Checks {
     }
 
     function mintNftValidation() internal virtual inline {
-        require(msg.value >= Constants.DEPLOY + Constants.PROCESS_MIN, Errors.INVALID_VALUE);
+        
     }
 
     function mintNftLogic() internal virtual inline {
