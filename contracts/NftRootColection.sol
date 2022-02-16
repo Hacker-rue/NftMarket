@@ -47,7 +47,7 @@ contract NftRootColection is NftRoot {
 
 
 
-    function deployMetadata(
+    function deployMetadata (
         int8 wid,
         string name,
         string description,
@@ -63,7 +63,7 @@ contract NftRootColection is NftRoot {
         require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
 
         TvmCell codeData = _buildDataCode(address(this));
-        TvmCell stateData = _buildDataState(codeData, _totalSupply);
+        TvmCell stateData = _buildDataState(codeData, _maxMinted);
 
         new Data{
             stateInit: stateData,
