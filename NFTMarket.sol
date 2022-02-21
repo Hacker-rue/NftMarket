@@ -52,11 +52,12 @@ contract NFTMarket is NftRootResolver, OfferResolver, IndexOfferResolver {
     function putOnSale(address addrNft, uint128 price) public {
         require(msg.value >= 0.7 ton);
         TvmCell code = _buildOfferCode();
-        TvmCell state = _buildOfferCodeState(code, msg.sender, addrNft);
+        TvmCell state = _buildOfferCodeState(code, addrNft);
         new Offer{
             stateInit: state,
             value: 0.5 ton
-        } (price, _indexOffer);
+        } (price, _indexOffer, msg.sender);
+
         msg.sender.transfer({value: 0, flag: 64});
     }
 

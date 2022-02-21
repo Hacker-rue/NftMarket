@@ -13,8 +13,9 @@ import "./Data.sol";
 
 contract Offer is IndexOfferResolver {
 
-    address static _addrOwner;
     address static _addrNft;
+
+    address _addrOwner;
 
     address _addrNftMarket;
 
@@ -24,22 +25,23 @@ contract Offer is IndexOfferResolver {
 
     address _buyer;
 
-    constructor (uint128 price, TvmCell codeIndexOffer) public {
+    constructor (uint128 price, TvmCell codeIndexOffer, address addrOwner) public {
         optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
         require(optSalt.hasValue(), Errors.CONTRACT_CODE_NOT_SALTED);
         (address addrNftMarket) = optSalt.get().toSlice().decode(address);
         require(msg.sender == addrNftMarket, Errors.INVALID_CALLER);
         tvm.rawReserve(0.01 ton, 0);
 
+        _addrOwner = addrOwner;
         _addrNftMarket = addrNftMarket;
         _price = price;
         _codeIndexOffer = codeIndexOffer;
 
         deployIndex();
 
-        Data(_addrNft).getAddrOwner{value: 0.1 ton, callback: Offer.CheckAddrOwner}();
+        Data(_addrNft).getAddrOwner{value: 0.2 ton, callback: Offer.CheckAddrOwner}();
 
-        msg.sender.transfer({value: 0, flag: 128});
+        _addrOwner.transfer({value: 0, flag: 128});
     }
 
     function Buy() public {
@@ -47,11 +49,11 @@ contract Offer is IndexOfferResolver {
         require(msg.sender != _addrOwner);
         require(msg.sender != address(0));
         require(_buyer == address(0));
-        require(msg.value >= _price + Constants.PROCESS_MIN * 3);
+        require(msg.value >= _price + 0.5 ton);
 
         _buyer = msg.sender;
 
-        Data(_addrNft).getAddrApproved{value: 0.2 ton, callback: Offer.CheckAddrApproved} ();
+        Data(_addrNft).getAddrApproved{value: 0.3 ton, callback: Offer.CheckAddrApproved} ();
     }
 
     function deployIndex() internal inline {
@@ -65,7 +67,11 @@ contract Offer is IndexOfferResolver {
         require(msg.sender == _addrNft);
         if(addrOwner == _addrOwner) {
             _Check = true;
+            _addrOwner.transfer({value: 0, flag: 64});
         } else {
+            address addrIndex = resolveAddrIndexOffer(_addrNftMarket, _addrOwner, address(this));
+            IndexOffer(addrIndex).destruct(_addrOwner);
+
             selfdestruct(_addrOwner);
         }
     }
@@ -76,6 +82,9 @@ contract Offer is IndexOfferResolver {
             Data(_addrNft).transfer{value: 0.5 ton} (_buyer);
             _addrOwner.transfer({value: _price / 100 * 90});
             address(0).transfer({value: _price / 100 * 10});
+
+            address addrIndex = resolveAddrIndexOffer(_addrNftMarket, _addrOwner, address(this));
+            IndexOffer(addrIndex).destruct(_addrOwner);
 
             selfdestruct(_buyer);
         } else {

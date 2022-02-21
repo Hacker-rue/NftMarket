@@ -13,9 +13,9 @@ contract OfferResolver {
         return tvm.hash(_buildOfferCode());
     }
 
-    function resolveAddrOffer(address addrOwner, address addrNft) public view returns(address addrOffer) {
+    function resolveAddrOffer(address addrNft) public view returns(address addrOffer) {
         TvmCell code = _buildOfferCode();
-        TvmCell state = _buildOfferCodeState(code, addrOwner, addrNft);
+        TvmCell state = _buildOfferCodeState(code, addrNft);
         uint256 hashState = tvm.hash(state);
         addrOffer = address.makeAddrStd(0, hashState);
     }
@@ -28,12 +28,11 @@ contract OfferResolver {
 
     function _buildOfferCodeState(
         TvmCell code,
-        address addrOwner,
         address addrNft
     ) internal virtual pure returns(TvmCell) {
         return tvm.buildStateInit({
             contr: Offer,
-            varInit: {_addrOwner: addrOwner, _addrNft: addrNft},
+            varInit: {_addrNft: addrNft},
             code: code
         });
     }
