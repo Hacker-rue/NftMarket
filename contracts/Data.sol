@@ -44,13 +44,14 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         uint128 size,
         TvmCell codeIndex,
         TvmCell codeDataChunk,
-        Meta meta
+        Meta meta,
+        address sendGasToAddr
     ) public {
         optional(TvmCell) optSalt = tvm.codeSalt(tvm.code());
         require(optSalt.hasValue(), Errors.CONTRACT_CODE_NOT_SALTED);
         (address addrRoot) = optSalt.get().toSlice().decode(address);
         require(msg.sender == addrRoot, Errors.INVALID_CALLER);
-
+        tvm.rawReserve(0.2 ton, 0);
         _name = name;
         _descriprion = descriprion;
         _addrOwner = addrOwner;
@@ -68,6 +69,9 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         _codeDataChunk = codeDataChunk;
 
         deployIndex(addrOwner);
+        
+
+        sendGasToAddr.transfer({value: 0, flag: 128});
     }
 
     function setRoyalty(uint128 royalty) public override {
@@ -109,6 +113,8 @@ contract Data is IData, IndexResolver, DataChunkResolver {
         _addrOwner = addrTo;
 
         deployIndex(addrTo);
+
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
     function transferValidation() internal virtual inline {

@@ -60,6 +60,7 @@ contract NftRootColection is NftRoot {
     ) public {
         require(_inited == true, Errors.CONTRACT_NOT_INITED);
         require(msg.sender == _addrOwner, Errors.INVALID_CALLER);
+        require(msg.value >= 1.2 ton);
 
         TvmCell codeData = _buildDataCode(address(this));
         TvmCell stateData = _buildDataState(codeData, _maxMinted);
@@ -79,10 +80,13 @@ contract NftRootColection is NftRoot {
             size,
             _codeIndex,
             _codeDataChunk,
-            meta
+            meta,
+            msg.sender
         );
 
         _maxMinted++;
+
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
     function mintNft() public {
@@ -90,7 +94,7 @@ contract NftRootColection is NftRoot {
         mintNftValidation();
         mintNftLogic();
 
-
+        msg.sender.transfer({value: 0, flag: 64});
     }
 
     function mintNftLogic() internal inline override {
@@ -103,6 +107,7 @@ contract NftRootColection is NftRoot {
     }
 
     function mintNftValidation() internal inline override {
+        require(msg.value >= 0.3 ton);
         require(_totalSupply < _maxMinted);
     }
 

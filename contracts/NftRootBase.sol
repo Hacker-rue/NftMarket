@@ -55,7 +55,8 @@ contract NftRootBase is NftRoot {
             size,
             _codeIndex,
             _codeDataChunk,
-            meta
+            meta,
+            msg.sender
         );
 
         _totalSupply++;
