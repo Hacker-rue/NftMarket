@@ -86,6 +86,18 @@ contract Offer is IndexOfferResolver {
         }
     }
 
+    function getInfo() public view returns(
+        address addrNft,
+        address addrOwner,
+        uint128 price,
+        bool check
+    ) {
+        addrNft = _addrNft;
+        addrOwner = _addrOwner;
+        price = _price;
+        check = _Check;
+    }
+
 
 
     modifier onlyOwner() {

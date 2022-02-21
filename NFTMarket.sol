@@ -10,10 +10,11 @@ import "./contracts/NftRootBase.sol";
 
 import "./contracts/resolvers/NftRootResolver.sol";
 import "./contracts/resolvers/OfferResolver.sol";
+import "./contracts/resolvers/IndexOfferResolver.sol";
 
 import "./contracts/libraries/Constants.sol";
 
-contract NFTMarket is NftRootResolver, OfferResolver {
+contract NFTMarket is NftRootResolver, OfferResolver, IndexOfferResolver {
 
     address oneNFTRoot;
 
