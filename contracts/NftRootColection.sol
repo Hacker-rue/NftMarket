@@ -94,20 +94,21 @@ contract NftRootColection is NftRoot {
         mintNftValidation();
         mintNftLogic();
 
-        msg.sender.transfer({value: 0, flag: 64});
     }
 
     function mintNftLogic() internal inline override {
         address addrData = resolveData(address(this), _totalSupply);
 
-        Data(addrData).transfer{value: Constants.DEPLOY_SM}(msg.sender);
+        Data(addrData).transfer{value: 0.6 ton}(msg.sender);
 
         _totalSupply++;
+
+
         
     }
 
     function mintNftValidation() internal inline override {
-        require(msg.value >= 0.3 ton);
+        require(msg.value >= 0.7 ton);
         require(_totalSupply < _maxMinted);
     }
 
